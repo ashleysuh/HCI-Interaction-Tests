@@ -1,94 +1,83 @@
 <!DOCTYPE html>
 <html>
- <head>
-<!--Meta-->
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!--Title-->
 <title>Drop Down Menu</title>
 
-<!--Embeddings-->
 <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet"> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
 </head>
 
 <style type="text/css">
-
 .line {
     fill: none;
     stroke: steelblue;
     stroke-width: 3;
 }
-  
 .overlay {
   fill: none;
   pointer-events: all;
 }
-
 .dot {
     fill: steelblue;
     stroke: #fff;
 }
-  
 .focus circle {
   fill: none;
   stroke: steelblue;
 }
-
-h1,h3 {
+h1 {
   text-align: center;
 }
-
 .chart-container {
   text-align: center;
 }
-
 .div-chart {
   display: inline-block;
 }
-
 </style>
 <body>
-
-
 <div class="chart-container">
-<div id ="chart" class="div-chart"></div>
+  <!-- for the chart -->
+  <div id ="chart" class="div-chart"></div>
+  <!-- user instructions -->
+  <h1>Using the chart above, please select the value for <strong>y</strong> when <strong>x=2</strong>:</h1>
+  <!-- drop down toggle -->
+  <p><label for="yval"></label>
+  <select id="yval" style="font-size: 16px;">
+    <option value="zero">0</option>
+    <option value="five">5</option>
+    <option value="ten">10</option>
+    <option value="fifteen">15</option>
+    <option value="twenty">20</option>
+  </select><br>
 
-<h1>Using the chart above, please select the value for <strong>y</strong> when <strong>x=2</strong>:</h1>
-
-<p><label for="yval"></label>
-
-<select id="yval" style="font-size: 16px;">
-  <option value="volvo">0</option>
-  <option value="saab">5</option>
-  <option value="opel">10</option>
-  <option value="audi">15</option>
-  <option value="audi">20</option>
-</select><br>
-
-<button onclick="getTime()" type="button">Submit</button> </p>
-
+  <!-- when user clicks the button, the time spent on the page is displayed as a pop-up -->
+  <button onclick="getTime()" type="button">Submit</button> </p>
 </div>
-
-<script>
-var time, msec, seconds;
-window.onload=function(){
-	time = new Date();
-}
-
-function getTime() {
-	msec = new Date()-time;
-	seconds = msec/1000;
-	window.alert("Time spent: " + seconds + " seconds");
-}
-</script>
-
-
-<script src="https://d3js.org/d3.v5.min.js"></script>
 </body>
 
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
 <script>
+
+var startTime, msec, sec;
+
+// starts a timer once the page is loaded
+window.onload=function(){
+  startTime = new Date();
+}
+
+// returns the total time the user spent on the page
+function getTime() {
+  msec = new Date()-startTime;
+  sec = msec/1000;
+  window.alert("Time spent: " + sec + " seconds");
+}
+
+// THE REST IS D3 NONSENSE for drawing the graph
 var margin = {top: 50, right: 50, bottom: 50, left: 50}
   , width = 500 - margin.left - margin.right
   , height = 350 - margin.top - margin.bottom;
@@ -102,9 +91,10 @@ var yScale = d3.scaleLinear()
     .range([height, 0]); 
 
 var line = d3.line()
-    .x(function(d, i) { return xScale(i); }) // set the x values for the line generator
-    .y(function(d) { return yScale(d.y); }) // set the y values for the line generator 
+    .x(function(d, i) { return xScale(i); })
+    .y(function(d) { return yScale(d.y); }) 
 
+// toy data, can change later
 var dataset = [ {"y": 5}, {"y": 20}, {"y": 10}, {"y": 15}, {"y": 5} ]
 
 console.log(dataset);
@@ -165,6 +155,5 @@ svg.append("text")
         .attr("text-anchor", "middle")  
         .style("font-size", "16px") 
         .text("You will be performing a very simple task for us!");
-
 </script>
 
