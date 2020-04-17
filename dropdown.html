@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+ <head>
+<!--Meta-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--Title-->
+<title>Drop Down Menu</title>
+
+<!--Embeddings-->
+<link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+</head>
+
+<style type="text/css">
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 3;
+}
+  
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.dot {
+    fill: steelblue;
+    stroke: #fff;
+}
+  
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
+h1,h3 {
+  text-align: center;
+}
+
+.chart-container {
+  text-align: center;
+}
+
+.div-chart {
+  display: inline-block;
+}
+
+</style>
+<body>
+
+
+<div class="chart-container">
+<div id ="chart" class="div-chart"></div>
+
+<h1>Using the chart above, please select the value for <strong>y</strong> when <strong>x=2</strong>:</h1>
+
+<p><label for="yval"></label>
+
+<select id="yval" style="font-size: 16px;">
+  <option value="volvo">0</option>
+  <option value="saab">5</option>
+  <option value="opel">10</option>
+  <option value="audi">15</option>
+  <option value="audi">20</option>
+</select><br>
+
+<button onclick="getTime()" type="button">Submit</button> </p>
+
+</div>
+
+<script>
+var time, msec, seconds;
+window.onload=function(){
+	time = new Date();
+}
+
+function getTime() {
+	msec = new Date()-time;
+	seconds = msec/1000;
+	window.alert("Time spent: " + seconds + " seconds");
+}
+</script>
+
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+</body>
+
+<script>
+var margin = {top: 50, right: 50, bottom: 50, left: 50}
+  , width = 500 - margin.left - margin.right
+  , height = 350 - margin.top - margin.bottom;
+
+var xScale = d3.scaleLinear()
+    .domain([0, 4]) 
+    .range([0, width]); 
+
+var yScale = d3.scaleLinear()
+    .domain([0, 20])  
+    .range([height, 0]); 
+
+var line = d3.line()
+    .x(function(d, i) { return xScale(i); }) // set the x values for the line generator
+    .y(function(d) { return yScale(d.y); }) // set the y values for the line generator 
+
+var dataset = [ {"y": 5}, {"y": 20}, {"y": 10}, {"y": 15}, {"y": 5} ]
+
+console.log(dataset);
+
+var svg = d3.select("#chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(xScale)
+    	.ticks(5)
+        .tickFormat(d3.format(".0s")));
+
+svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .style("font-size", "12px") 
+    .style("font-style", "italic")
+    .attr("x", width)
+    .attr("y", height + 35)
+    .text("x-values");
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(d3.axisLeft(yScale) 
+    	.ticks(5));
+
+svg.append("path")
+    .datum(dataset)
+    .attr("class", "line")
+    .attr("d", line);
+
+svg.selectAll(".dot")
+    .data(dataset)
+  .enter().append("circle")
+    .attr("class", "dot")
+    .attr("cx", function(d, i) { return xScale(i) })
+    .attr("cy", function(d) { return yScale(d.y) })
+    .attr("r", 5)
+
+svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .style("font-size", "12px") 
+	.style("font-style", "italic")
+    .attr("y", -45)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("y-values");
+
+svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .text("You will be performing a very simple task for us!");
+
+</script>
+
